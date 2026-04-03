@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Кнопка «Погрузиться» — скроллит к хабу
+  // Кнопка «Погрузиться»
   var btnDive = document.getElementById('btn-dive');
   if (btnDive) {
     btnDive.addEventListener('click', function() {
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Скрываем индикатор скролла при прокрутке
+  // Скрываем индикатор скролла
   var scrollHint = document.getElementById('scroll-hint');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 100 && scrollHint) {
@@ -16,40 +16,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Загружаем прогресс из localStorage
+  // Прогресс модуля 1
   var mod1Progress = parseInt(localStorage.getItem('nc_mod1_progress') || '0', 10);
   var mod1Status = localStorage.getItem('nc_mod1_status') || '';
 
-  // Обновляем прогресс модуля 1
   var mod1Bar = document.getElementById('mod1-bar');
   var mod1Pct = document.getElementById('mod1-pct');
   if (mod1Bar) mod1Bar.style.width = mod1Progress + '%';
   if (mod1Pct) mod1Pct.textContent = mod1Progress + '%';
 
-  // Если модуль 1 завершён
+  // Если модуль 1 пройден — разблокируем модуль 2
   if (mod1Status === 'complete') {
     var card1 = document.querySelector('[data-module="1"]');
     if (card1) {
       card1.classList.remove('unlocked');
       card1.classList.add('completed');
-      card1.querySelector('.hub-card-status').textContent = '✅ Пройден';
-      card1.querySelector('.hub-card-btn').textContent = 'Повторить';
+      var s1 = card1.querySelector('.hub-card-status');
+      if (s1) s1.textContent = '✅ Пройден';
+      var b1 = card1.querySelector('.hub-card-btn');
+      if (b1) b1.textContent = 'Повторить';
     }
 
-    // Разблокируем модуль 2
     var card2 = document.querySelector('[data-module="2"]');
     if (card2) {
       card2.classList.remove('locked');
       card2.classList.add('unlocked');
-      card2.querySelector('.hub-card-status').textContent = '🟢 Доступен';
-      var btn2 = card2.querySelector('.hub-card-btn');
-      btn2.classList.remove('disabled');
-      btn2.textContent = 'Начать →';
-      // btn2.href = 'module2.html'; // раскомментируй когда будет модуль 2
+      var s2 = card2.querySelector('.hub-card-status');
+      if (s2) s2.textContent = '🟢 Доступен';
+      var b2 = card2.querySelector('.hub-card-btn');
+      if (b2) {
+        b2.classList.remove('disabled');
+        b2.textContent = 'Начать →';
+      }
     }
   }
 
-  // Анимация появления карточек при скролле
+  // Анимация появления карточек
   var cards = document.querySelectorAll('.hub-card');
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
